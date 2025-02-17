@@ -1,18 +1,16 @@
 import express from 'express';
 import http from 'http';
-// import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './src/config/database.js';
 import routes from './src/routes/index.js';
-// import { startLiveMarketFeed } from './src/controllers/MarketdataController.js';
-// import "./src/Job/tradeCron.js";
 import logger from './src/middleware/logging/logger.js';
 
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
+
 // Connect to Database
 (async () => {
     try {
@@ -23,50 +21,27 @@ const server = http.createServer(app);
         process.exit(1); // Exit process if DB connection fails
     }
 })();
-app.use(cors({ origin: 'https://forexlife.netlify.app' }));
 
-
-// const io = new Server(server, {
-//     cors: {
-//         origin: process.env.CLIENT_URL, 
-//         methods: ['GET', 'POST'],
-//         allowedHeaders: ["my-custom-header"],
-//     credentials: true,
-//     }
-// });
+// ✅ Fix CORS issue
+const allowedOrigins = ['https://forexlife.netlify.app'];
 
 app.use(cors({
-    origin:  process.env.CLIENT_URL,
-    methods: ['GET', 'POST','PUT','DELETE'],
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  }));
-  app.use(express.json());
+    credentials: true
+}));
 
+app.use(express.json());
 
-
-
-
-
-// io.on('connection', (socket) => {
-
-
-   
-//      startLiveMarketFeed(socket);
-
-//     socket.on('disconnect', () => {
-      
-//     });
-// });
-
-
-// app.get('/api/market/live', (req, res) => {
-//     res.send({ message: 'Live market data is being broadcasted via WebSocket.' });
-// });
-
-
+// Routes
 app.use('/', routes);
-
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
