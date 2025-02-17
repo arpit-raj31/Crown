@@ -23,6 +23,8 @@ const server = http.createServer(app);
         process.exit(1); // Exit process if DB connection fails
     }
 })();
+app.use(cors({ origin: 'https://forexlife.netlify.app' }));
+
 
 // const io = new Server(server, {
 //     cors: {
