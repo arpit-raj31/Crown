@@ -5,13 +5,12 @@ import cors from 'cors';
 import connectDB from './src/config/database.js';
 import routes from './src/routes/index.js';
 import logger from './src/middleware/logging/logger.js';
-
+import "./src/Job/tradeCron.js";
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
-
-// Connect to Database
+//Connect to Database
 (async () => {
     try {
         await connectDB();
