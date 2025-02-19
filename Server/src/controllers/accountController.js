@@ -72,16 +72,11 @@ export const createLiveAccount = async (req, res) => {
     //  Generate a unique account ID
     const liveAccountUniqueId = await generateCustomUuid();
 
-    //  Hash the unique account ID and wallet PIN
-    const saltRounds = 10;
-    const hashedLiveAccountId = await bcrypt.hash(liveAccountUniqueId, saltRounds);
-    const hashedWalletPin = await bcrypt.hash(walletPin, saltRounds);
-
     //  Create the account with default balance (0)
     const newLiveAccount = await LiveAccount.create({
-      user: userId,
-      liveAccountUniqueId: hashedLiveAccountId,  // Save the hashed ID
-      walletPin: hashedWalletPin, // Save the hashed PIN
+      user: userId,  // ✅ Store plain text userId
+      liveAccountUniqueId,  // ✅ Store plain text Live Account ID
+      walletPin, // ✅ Store plain text PIN
       leverage,
       currency,
       accountNickname,
@@ -135,6 +130,8 @@ export const createLiveAccount = async (req, res) => {
     });
   }
 };
+
+
 
 export const getLiveAccount = async (req, res) => {
   const { userId, uniqueUuid, walletPin } = req.params;
