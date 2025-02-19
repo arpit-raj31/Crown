@@ -31,7 +31,6 @@ const generateCustomUuid = async () => {
   return uniqueUuid;
 };
 
-
 export const createLiveAccount = async (req, res) => {
   try {
     const {
@@ -113,9 +112,22 @@ export const createLiveAccount = async (req, res) => {
       from: process.env.EMAIL_USER,
       to: user.email,
       subject: "Your Live Account Created Successfully",
-      text: `Hello, your live account has been created successfully. Your unique Live Account ID is securely stored.`,
+      text: `Hello ${user.username},
+    
+    Your live account has been successfully created!
+    
+    📌 **Live Account ID:** ${liveAccountUniqueId}
+    
+    💳 **Account Type:** ${accountType}
+    💰 **Currency:** ${currency}
+    📈 **Leverage:** ${leverage || customLeverage}
+    
+    Please keep your Live Account ID safe, as it is required for transactions.
+    
+    Best regards,  
+    Your Trading Platform Team`,
     };
-
+    
     await transporter.sendMail(mailOptions);
 
     res.status(201).json({
