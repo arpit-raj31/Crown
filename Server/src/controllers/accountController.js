@@ -134,19 +134,18 @@ export const createLiveAccount = async (req, res) => {
 
 
 export const getLiveAccount = async (req, res) => {
-  const { userId, uniqueUuid, walletPin } = req.params;
+  const { userId } = req.params; // Only require userId
 
   try {
-    const account = await LiveAccount.findOne({
-      user: userId,
-      liveAccountUniqueId: uniqueUuid,
-      walletPin: walletPin,
-    }).populate("user", "username email");
+    const account = await LiveAccount.findOne({ user: userId }).populate(
+      "user",
+      "username email"
+    );
 
     if (!account) {
       return res
         .status(404)
-        .json({ message: "Live account not found with the provided details." });
+        .json({ message: "Live account not found for this user." });
     }
 
     res.status(200).json({ account });
@@ -156,6 +155,7 @@ export const getLiveAccount = async (req, res) => {
       .json({ message: "Error fetching live account", error: err.message });
   }
 };
+
 
 export const updateBalance = async (req, res) => {
   const { userId } = req.params;
