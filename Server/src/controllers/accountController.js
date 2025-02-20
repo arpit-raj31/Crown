@@ -218,7 +218,7 @@ export const withdraw = async (req, res) => {
       user: userId,
       type: "withdrawal",
       amount,
-      status: "atm",
+      status: "success",
       description: "Withdraw to Live account",
     });
 
@@ -268,7 +268,7 @@ export const deposit = async (req, res) => {
       user: userId,
       type: "deposit",
       amount,
-      status: "atm",
+      status: "success",
       description: "Deposit to Live account",
     });
 
@@ -438,7 +438,7 @@ export const demowithdraw = async (req, res) => {
       user: userId,
       type: "withdrawal",
       amount,
-      status: "atm",
+      status: "success",
       description: "Withdraw to demo account",
     });
 
@@ -476,7 +476,7 @@ export const demodeposit = async (req, res) => {
       user: userId,
       type: "deposit",
       amount,
-      status: "atm",
+      status: "success",
       description: "Deposit to demo account",
     });
 
